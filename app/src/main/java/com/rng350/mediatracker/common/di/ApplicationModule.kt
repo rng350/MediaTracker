@@ -6,6 +6,8 @@ import com.rng350.mediatracker.BuildConfig
 import com.rng350.mediatracker.common.Constants
 import com.rng350.mediatracker.common.database.MediaTrackerDatabase
 import com.rng350.mediatracker.common.database.MovieDao
+import com.rng350.mediatracker.networking.TMDBApi
+import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -29,11 +31,21 @@ class ApplicationModule {
                     level = HttpLoggingInterceptor.Level.BODY
                 }
             })
+            addInterceptor { chain ->
+                val originalRequest = chain.request()
+                val urlWithApiKey = originalRequest.url.newBuilder()
+                    .addQueryParameter("api_key", BuildConfig.TMDB_API_KEY)
+                    .build()
+                val newRequest = originalRequest.newBuilder()
+                    .url(urlWithApiKey)
+                    .build()
+                chain.proceed(newRequest)
+            }
             build()
         }
         return Retrofit.Builder()
-            .baseUrl(Constants.BASE_URL)
-            .addConverterFactory(MoshiConverterFactory.create())
+            .baseUrl(Constants.TMDB_BASE_URL)
+            .addConverterFactory(MoshiConverterFactory.create(Moshi.Builder().build()))
             .client(httpClient)
             .build()
     }
@@ -45,11 +57,18 @@ class ApplicationModule {
             application,
             MediaTrackerDatabase::class.java,
             Constants.DB_NAME
-        ).build()
+        )
+            .fallbackToDestructiveMigration()
+            .build()
     }
 
     @Provides
     fun movieDao(database: MediaTrackerDatabase): MovieDao {
         return database.movieDao
+    }
+
+    @Provides
+    fun theMovieDbApi(retrofit: Retrofit): TMDBApi {
+        return retrofit.create(TMDBApi::class.java)
     }
 }

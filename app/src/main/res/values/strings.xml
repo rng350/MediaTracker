@@ -4,4 +4,8 @@
     <string name="search_icon">Search Icon</string>
     <string name="search">Search</string>
     <string name="movie_poster">Movie Poster</string>
+    <string name="no_more_movies_to_load">That\'s all, folks!</string>
+    <string name="search_movies">Search Movies</string>
+    <string name="search_for_movies">Search for movies</string>
+    <string name="no_release_date">No release date</string>
 </resources>

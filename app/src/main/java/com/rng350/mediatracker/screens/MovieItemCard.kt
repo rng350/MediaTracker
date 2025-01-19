@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.Text
@@ -25,38 +26,37 @@ import coil3.request.ImageRequest
 import coil3.request.crossfade
 import com.rng350.mediatracker.R
 import com.rng350.mediatracker.common.toDisplay
-import com.rng350.mediatracker.movies.Movie
+import com.rng350.mediatracker.movies.MovieForDisplay
 import java.time.LocalDate
-import java.time.OffsetDateTime
 
 @Composable
-fun MovieItemCard(movie: Movie, modifier: Modifier) {
+fun MovieItemCard(movie: MovieForDisplay, modifier: Modifier) {
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .height(140.dp),
+            .height(150.dp),
         onClick = {},
-        shape = RoundedCornerShape(10.dp)
+        shape = RoundedCornerShape(5.dp)
     ) {
         Row(verticalAlignment = Alignment.Top) {
             AsyncImage(
-                model = ImageRequest.Builder(LocalContext.current)
-                    .data(movie.moviePosterUri ?: R.drawable.godfather_icon_test)
-                    .crossfade(true)
-                    .build(),
-                placeholder = painterResource(R.drawable.loading),
+                model = movie.moviePosterUrl,
+                placeholder = painterResource(R.drawable.blank_poster),
                 contentDescription = stringResource(R.string.movie_poster),
-                contentScale = ContentScale.FillBounds
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .width(100.dp)
+                    .height(150.dp)
             )
             Column(
                 modifier = Modifier
-                    .fillMaxWidth(0.8f)
+                    .weight(1.0f)
             ) {
                 Text(
                     text = movie.movieTitle,
                     fontWeight = FontWeight.Bold
                 )
-                Text(text = movie.movieReleaseDate.toDisplay())
+                Text(text = movie.movieReleaseDate?.toDisplay() ?: stringResource(R.string.no_release_date))
                 Spacer(Modifier.height(20.dp))
                 Text(
                     text = movie.moviePremise,
@@ -75,13 +75,12 @@ fun MovieItemCard(movie: Movie, modifier: Modifier) {
 @Composable
 fun MovieItemPreview() {
     MovieItemCard(
-        movie = Movie(
+        movie = MovieForDisplay(
             movieId = 123,
             movieTitle = "The Godfather",
             movieReleaseDate = LocalDate.of(1972, 3, 24),
             moviePremise = "Spanning the years 1945 to 1955, a chronicle of the fictional Italian-American Corleone crime family. When organized crime family patriarch, Vito Corleone barely survives an attempt on his life, his youngest son, Michael steps in to take care of the would-be killers, launching a campaign of bloody revenge.",
-            moviePosterUri = null,
-            lastRefreshedDateTime = OffsetDateTime.now()
+            moviePosterUrl = "https://cdn.myanimelist.net/images/anime/1/584l.jpg",
         ),
         Modifier
     )

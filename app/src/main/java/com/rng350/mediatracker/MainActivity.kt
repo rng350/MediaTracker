@@ -11,6 +11,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.rng350.mediatracker.screens.DiscoverMoviesPreview
+import com.rng350.mediatracker.screens.DiscoverMoviesScreen
 import com.rng350.mediatracker.ui.theme.MediaTrackerTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -21,12 +23,13 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             MediaTrackerTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                /*Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     Greeting(
                         name = "Android",
                         modifier = Modifier.padding(innerPadding)
                     )
-                }
+                }*/
+                DiscoverMoviesScreen()
             }
         }
     }

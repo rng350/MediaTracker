@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import com.rng350.mediatracker.R
 
 @Composable
-fun SearchBar(
+fun MediaTrackerSearchBar(
     query: String,
     onQueryChanged: (String) -> Unit,
     onSearch: () -> Unit,
