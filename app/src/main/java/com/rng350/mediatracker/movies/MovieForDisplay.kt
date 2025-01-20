@@ -3,7 +3,7 @@ package com.rng350.mediatracker.movies
 import java.time.LocalDate
 
 data class MovieForDisplay(
-    val movieId: Int,
+    val movieId: String,
     val movieTitle: String,
     val movieReleaseDate: LocalDate? = null,
     val moviePremise: String,

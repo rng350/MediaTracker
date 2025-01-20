@@ -33,7 +33,6 @@ class SearchMoviesUseCase @Inject constructor(
             }
             if (!onLastPage && hasEnoughTimePassed()) {
                 lastApiRequestNano = System.nanoTime()
-                Log.d("SearchMoviesUseCase", "1")
                 val searchedMovies = theMovieDBAPI.searchMovies(
                     trimmedQuery,
                     /*releaseYear,*/

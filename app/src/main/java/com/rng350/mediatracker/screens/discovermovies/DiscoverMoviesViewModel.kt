@@ -1,9 +1,8 @@
-package com.rng350.mediatracker.screens
+package com.rng350.mediatracker.screens.discovermovies
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.rng350.mediatracker.movies.Movie
 import com.rng350.mediatracker.movies.MovieForDisplay
 import com.rng350.mediatracker.movies.usecases.SearchMoviesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel

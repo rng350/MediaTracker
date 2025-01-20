@@ -18,7 +18,7 @@ data class MovieSchema(
 ) {
     fun toMovieForDisplay(): MovieForDisplay {
         return MovieForDisplay(
-            movieId = this.id.toInt(),
+            movieId = this.id,
             movieTitle = this.title,
             moviePremise = this.overview ?: "",
             movieReleaseDate = if (!this.releaseDate.isNullOrEmpty()) LocalDate.parse(this.releaseDate, DateTimeFormatter.ISO_LOCAL_DATE) else null,
