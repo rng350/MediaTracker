@@ -17,7 +17,7 @@ import androidx.room.Index
             onDelete = ForeignKey.CASCADE
         ),
         ForeignKey(
-            entity = Person::class,
+            entity = MovieStaff::class,
             parentColumns = ["person_id"],
             childColumns = ["person_id"],
             onUpdate = ForeignKey.CASCADE,

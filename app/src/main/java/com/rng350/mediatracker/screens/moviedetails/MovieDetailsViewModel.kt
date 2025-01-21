@@ -7,6 +7,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -26,7 +27,16 @@ class MovieDetailsViewModel @Inject constructor(
 
     suspend fun fetchMovieDetails(movieId: String) {
         withContext(Dispatchers.Main.immediate) {
-            fetchMovieDetailsUseCase
+            val fetchResult = fetchMovieDetailsUseCase(movieId)
+            val movieDetailsDisplayResult = when (fetchResult) {
+                FetchMovieDetailsUseCase.MovieDetailsResult.Error -> {
+                    MovieDetailsResult.Error
+                }
+                is FetchMovieDetailsUseCase.MovieDetailsResult.Success -> {
+                    MovieDetailsResult.Success(fetchResult.movieDetails)
+                }
+            }
+            _movieDetails.update { movieDetailsDisplayResult }
         }
     }
 }

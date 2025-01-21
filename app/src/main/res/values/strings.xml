@@ -8,4 +8,9 @@
     <string name="search_movies">Search Movies</string>
     <string name="search_for_movies">Search for movies</string>
     <string name="no_release_date">No release date</string>
+    <string name="directed_by">"Directed by "</string>
+    <string name="et_al">et al.</string>
+    <string name="overview">Overview</string>
+    <string name="starring">Starring</string>
+    <string name="genres">Genres</string>
 </resources>

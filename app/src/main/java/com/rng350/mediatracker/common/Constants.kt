@@ -7,4 +7,5 @@ object Constants {
     const val TMDB_IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500/"
     const val TMDB_MAX_SEARCH_RESULTS_PER_PAGE = 10
     const val TMDB_IMAGE_SUBFOLDER = "tmdb_images"
+    const val NUMBER_OF_ACTORS_IN_MOVIE_DETAILS = 20
 }

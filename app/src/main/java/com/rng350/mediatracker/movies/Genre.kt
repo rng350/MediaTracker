@@ -10,8 +10,6 @@ data class Genre(
     @PrimaryKey
     @ColumnInfo("genre_id", index = true)
     val genreId: Int,
-    @ColumnInfo("genre_name")
-    val genreName: String,
-    @ColumnInfo(name="last_refreshed_datetime")
-    val lastRefreshedDateTime: OffsetDateTime
+    @ColumnInfo("genre_name", index = true)
+    val genreName: String
 )

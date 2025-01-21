@@ -1,6 +1,7 @@
 package com.rng350.mediatracker.networking.movie
 
 import com.rng350.mediatracker.common.Constants.TMDB_IMAGE_BASE_URL
+import com.rng350.mediatracker.common.toLocalDate
 import com.rng350.mediatracker.movies.MovieForDisplay
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
@@ -21,7 +22,7 @@ data class MovieSchema(
             movieId = this.id,
             movieTitle = this.title,
             moviePremise = this.overview ?: "",
-            movieReleaseDate = if (!this.releaseDate.isNullOrEmpty()) LocalDate.parse(this.releaseDate, DateTimeFormatter.ISO_LOCAL_DATE) else null,
+            movieReleaseDate = this.releaseDate?.toLocalDate(),
             moviePosterUrl = if (!this.posterPath.isNullOrEmpty()) TMDB_IMAGE_BASE_URL + this.posterPath else null
         )
     }

@@ -1,9 +1,11 @@
 package com.rng350.mediatracker.networking
 
+import com.rng350.mediatracker.networking.movie.MovieDetailsSchema
 import com.rng350.mediatracker.networking.movie.MoviesListSchema
 import okhttp3.ResponseBody
 import retrofit2.Response
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface TMDBApi {
@@ -29,4 +31,9 @@ interface TMDBApi {
         @Query("include_adult") includeAdultContent: Boolean?,
         @Query("page") page: Int?
     ): Response<MoviesListSchema>
+
+    @GET("movie/{movie_id}?append_to_response=credits")
+    suspend fun getMovieDetails(
+        @Path("movie_id") movieId: String?
+    ): Response<MovieDetailsSchema>
 }
