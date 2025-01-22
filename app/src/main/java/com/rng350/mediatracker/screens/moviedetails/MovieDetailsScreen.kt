@@ -4,10 +4,13 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.Text
 import androidx.compose.material3.VerticalDivider
@@ -26,6 +29,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil3.compose.AsyncImage
 import com.rng350.mediatracker.R
 import com.rng350.mediatracker.common.toDisplay
+import com.rng350.mediatracker.screens.common.StaffRoleCard
 
 @Composable
 fun MovieDetailsScreen(
@@ -124,15 +128,22 @@ fun MovieDetailsScreen(
                         fontWeight = FontWeight.Bold,
                         fontSize = 15.sp
                     )
-                    val castList = movieDetails
-                        .movieActors
-                        .joinToString(
-                            separator = ", ",
-                            transform = { it.personName }
-                        )
-                    Text(
-                        text = castList
-                    )
+                    val listState = rememberLazyListState()
+                    LazyColumn(
+                        modifier = Modifier.fillMaxSize(),
+                        state = listState
+                    ) {
+                        val actorsList = movieDetails.movieActors
+                        items(count = actorsList.size) { index ->
+                            if (index > 0) {
+                                Spacer(modifier = Modifier.height(5.dp))
+                            }
+                            StaffRoleCard(
+                                movieCharacter = actorsList[index],
+                                onItemClicked = {}
+                            )
+                        }
+                    }
                 }
             }
         }

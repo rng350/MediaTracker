@@ -4,6 +4,7 @@ import com.rng350.mediatracker.common.Constants.NUMBER_OF_ACTORS_IN_MOVIE_DETAIL
 import com.rng350.mediatracker.common.Constants.TMDB_IMAGE_BASE_URL
 import com.rng350.mediatracker.common.toLocalDate
 import com.rng350.mediatracker.movies.Genre
+import com.rng350.mediatracker.movies.MovieCharacter
 import com.rng350.mediatracker.movies.MovieDetails
 import com.rng350.mediatracker.movies.MovieStaff
 import com.squareup.moshi.Json
@@ -57,12 +58,31 @@ data class MovieDetailsSchema(
             movieDirectors = movieCredits
                 ?.movieCrew
                 ?.filter { it.job == "Director" }
-                ?.map { MovieStaff(it.personId.toInt(), it.personName) }
+                ?.map { MovieStaff(
+                    personId = it.personId.toInt(),
+                    personName = it.personName,
+                    personProfilePicUri = null,
+                    personProfilePicUrl = null
+                ) }
                     ?: emptyList(),
             movieActors = movieCredits
                 ?.movieCast
+                ?.groupBy { it.actorId }
+                ?.map { (actorId, actorGroup) ->
+                    MovieCharacter(
+                        personId = actorId.toInt(),
+                        personName = actorGroup.first().actorName,
+                        personProfilePicUri = null,
+                        personProfilePicUrl =
+                            if (!actorGroup.first().actorProfilePic.isNullOrEmpty())
+                                "$TMDB_IMAGE_BASE_URL${actorGroup.first().actorProfilePic}"
+                            else null,
+                        personRoles = actorGroup.mapNotNull { it.characterName },
+                        orderOfImportance = actorGroup.minOf { it.orderOfImportance }
+                    )
+                }
+                ?.sortedBy { it.orderOfImportance }
                 ?.take(NUMBER_OF_ACTORS_IN_MOVIE_DETAILS)
-                ?.map { MovieStaff(it.actorId.toInt(), it.actorName) }
                     ?: emptyList(),
             moviePosterUrl = if (!posterPath.isNullOrEmpty()) "${TMDB_IMAGE_BASE_URL}$posterPath" else null
         )
@@ -87,7 +107,8 @@ data class MovieCastSchema(
     @Json(name="cast_id") val castId: String,
     @Json(name="name") val actorName: String,
     @Json(name="profile_path") val actorProfilePic: String?,
-    @Json(name="character") val characterName: String?
+    @Json(name="character") val characterName: String?,
+    @Json(name="order") val orderOfImportance: Int
 )
 
 @JsonClass(generateAdapter = true)

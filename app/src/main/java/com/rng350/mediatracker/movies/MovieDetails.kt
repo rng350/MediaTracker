@@ -9,6 +9,6 @@ data class MovieDetails(
     val movieReleaseDate: LocalDate? = null,
     val movieGenres: List<Genre>,
     val movieDirectors: List<MovieStaff>,
-    val movieActors: List<MovieStaff>,
+    val movieActors: List<MovieCharacter>,
     val moviePosterUrl: String? = null
 )

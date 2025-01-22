@@ -5,7 +5,6 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.time.LocalDate
-import java.time.OffsetDateTime
 
 @Entity(tableName = "movie_table")
 data class Movie(
@@ -21,5 +20,7 @@ data class Movie(
     @ColumnInfo(name="movie_premise")
     val moviePremise: String,
     @ColumnInfo(name="movie_poster_uri")
-    val moviePosterUri: Uri? = null
+    val moviePosterUri: Uri? = null,
+    @ColumnInfo(name="movie_poster_url")
+    val moviePosterUrl: String?
 )
