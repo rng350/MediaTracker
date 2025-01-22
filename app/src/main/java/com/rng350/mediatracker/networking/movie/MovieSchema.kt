@@ -5,8 +5,6 @@ import com.rng350.mediatracker.common.toLocalDate
 import com.rng350.mediatracker.movies.MovieForDisplay
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 
 @JsonClass(generateAdapter = true)
 data class MovieSchema(
