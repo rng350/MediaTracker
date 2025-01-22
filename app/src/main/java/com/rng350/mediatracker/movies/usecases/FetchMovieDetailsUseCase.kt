@@ -20,7 +20,7 @@ class FetchMovieDetailsUseCase @Inject constructor(
         return withContext(Dispatchers.IO) {
             val movieDetails = movieDetailsCache.get(movieId) ?: remotelyFetchMovieDetails(movieId)
             if (movieDetails != null) {
-                movieDetailsCache.updateCache(movieDetails)
+                movieDetailsCache.updateCache(key = movieDetails.movieId, updatedValue =  movieDetails)
                 MovieDetailsResult.Success(movieDetails)
             }
             else MovieDetailsResult.Error

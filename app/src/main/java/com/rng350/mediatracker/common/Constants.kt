@@ -8,4 +8,5 @@ object Constants {
     const val TMDB_MAX_SEARCH_RESULTS_PER_PAGE = 10
     const val TMDB_IMAGE_SUBFOLDER = "tmdb_images"
     const val NUMBER_OF_ACTORS_IN_MOVIE_DETAILS = 20
+    const val MOVIE_DETAILS_CACHE_MAX_SIZE = 100
 }
