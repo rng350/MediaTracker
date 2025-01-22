@@ -3,8 +3,10 @@ package com.rng350.mediatracker.common
 import okio.withLock
 import java.util.concurrent.locks.ReentrantLock
 
-abstract class LRUCache<K, V>(private val maxCacheSize: Int? = null) {
-    private val linkedHashMap = CustomLinkedHashMap<K,V>()
+abstract class LRUCache<K, V>(
+    private val linkedHashMap: CustomLinkedHashMap<K, V>,
+    private val maxCacheSize: Int? = null
+) {
     private val lock = ReentrantLock()
 
     open fun updateCache(key: K, updatedValue: V) {

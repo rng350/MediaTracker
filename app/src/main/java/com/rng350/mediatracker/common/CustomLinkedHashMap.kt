@@ -1,9 +1,13 @@
 package com.rng350.mediatracker.common
 
+import javax.inject.Inject
+import javax.inject.Singleton
+
 // Value of the map points to a Node in the doubly linked list implementation
 // K = key
 // V = value
-class CustomLinkedHashMap<K, V>() {
+@Singleton
+class CustomLinkedHashMap<K, V> @Inject constructor() {
     private var _listSize: Int = 0
     val listSize: Int get() = _listSize
     private val hashMap: HashMap<K, Node> = HashMap()
@@ -61,6 +65,9 @@ class CustomLinkedHashMap<K, V>() {
         }
         hashMap[key] = newFirstNode
         _listSize++
+        if (listSize == 1) {
+            _lastNode = newFirstNode
+        }
     }
 
     fun putAtEndOfList(key: K, newElement: V) {
@@ -76,6 +83,9 @@ class CustomLinkedHashMap<K, V>() {
         }
         hashMap[key] = newLastNode
         _listSize++
+        if (listSize==1) {
+            _firstNode = newLastNode
+        }
     }
 
     fun removeFirst(): V? {
