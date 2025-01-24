@@ -5,5 +5,7 @@ In order to run this app, you'll need to provide your own API key from TMDB and 
 
 TMDB_API_KEY=_INSERT_YOUR_API_KEY_HERE_
 
+On top of that, you'll also need a device with at least Android 8.
+
 ## Architecture
 MediaTracker implements the MVVM architecture with interactors (UseCases). The app uses Jetpack Compose, Coroutines and Flows, Material3, Room, Retrofit2, and Dagger Hilt.
