@@ -7,6 +7,7 @@ import com.rng350.mediatracker.movies.MovieGenre
 import com.rng350.mediatracker.movies.MovieActorAndRolesInFilm
 import com.rng350.mediatracker.movies.MovieDetails
 import com.rng350.mediatracker.movies.MovieStaff
+import com.rng350.mediatracker.movies.RoleAndImportance
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
@@ -52,9 +53,10 @@ data class MovieDetailsSchema(
         return MovieDetails(
             movieId = movieId ?: "",
             movieTitle = movieTitle ?: "Untitled Movie",
+            movieOriginalTitle = if (!originalMovieTitle.isNullOrEmpty()) originalMovieTitle else null,
             movieOverview = movieOverview ?: "No",
             movieReleaseDate = movieReleaseDate?.toLocalDate(),
-            movieMovieGenres = movieGenres?.map { MovieGenre(genreId = it.genreId, genreName = it.genreName) } ?: emptyList(),
+            movieGenres = movieGenres?.map { MovieGenre(genreId = it.genreId, genreName = it.genreName) } ?: emptyList(),
             movieDirectors = movieCredits
                 ?.movieCrew
                 ?.filter { it.job == "Director" }
@@ -77,7 +79,13 @@ data class MovieDetailsSchema(
                             if (!actorGroup.first().actorProfilePic.isNullOrEmpty())
                                 "$TMDB_IMAGE_BASE_URL${actorGroup.first().actorProfilePic}"
                             else null,
-                        personRoles = actorGroup.mapNotNull { it.characterName },
+                        personRoles = actorGroup.map {
+                            RoleAndImportance(
+                                characterName = it.characterName ?: "",
+                                castingId = it.castId.toInt(),
+                                orderOfImportance = it.orderOfImportance,
+                            )
+                        },
                         orderOfImportance = actorGroup.minOf { it.orderOfImportance }
                     )
                 }

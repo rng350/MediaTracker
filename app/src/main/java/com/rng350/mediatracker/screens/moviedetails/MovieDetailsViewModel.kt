@@ -1,21 +1,25 @@
 package com.rng350.mediatracker.screens.moviedetails
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.rng350.mediatracker.movies.MovieDetails
 import com.rng350.mediatracker.movies.usecases.AddMovieToWatchlistUseCase
 import com.rng350.mediatracker.movies.usecases.FetchMovieDetailsUseCase
+import com.rng350.mediatracker.movies.usecases.RemoveMovieFromWatchlistUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
 class MovieDetailsViewModel @Inject constructor(
     private val fetchMovieDetailsUseCase: FetchMovieDetailsUseCase,
-    private val addMovieToWatchlistUseCase: AddMovieToWatchlistUseCase
+    private val addMovieToWatchlistUseCase: AddMovieToWatchlistUseCase,
+    private val removeMovieFromWatchlistUseCase: RemoveMovieFromWatchlistUseCase
 ): ViewModel() {
     sealed class MovieDetailsResult {
         data class Success(val movieDetails: MovieDetails): MovieDetailsResult()
@@ -52,8 +56,13 @@ class MovieDetailsViewModel @Inject constructor(
     fun toggleToWatchList(movieId: String) {
         (movieDetails.value as? MovieDetailsResult.Success)
             ?.movieDetails
-            ?.let {
-                addMovieToWatchlistUseCase.invoke(it)
+            ?.let { movie ->
+                viewModelScope.launch {
+                    when (movieIsOnWatchlist.value) {
+                        true -> removeMovieFromWatchlistUseCase(movie)
+                        false -> addMovieToWatchlistUseCase(movie)
+                    }
+                }
                 _movieIsOnWatchlist.update { !_movieIsOnWatchlist.value }
             }
     }

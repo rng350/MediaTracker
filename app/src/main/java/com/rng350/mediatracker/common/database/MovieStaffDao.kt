@@ -1,9 +1,8 @@
 package com.rng350.mediatracker.common.database
 
 import androidx.room.Dao
-import androidx.room.Insert
 import androidx.room.Upsert
-import com.rng350.mediatracker.movies.MovieActor
+import com.rng350.mediatracker.movies.MovieActingRole
 import com.rng350.mediatracker.movies.MovieDirector
 import com.rng350.mediatracker.movies.MovieStaff
 
@@ -12,9 +11,15 @@ interface MovieStaffDao {
     @Upsert
     suspend fun upsertMovieStaff(movieStaff: MovieStaff)
 
-    @Insert
-    suspend fun insertMovieActor(movieActor: MovieActor)
+    @Upsert
+    suspend fun upsertMovieStaff(movieStaff: List<MovieStaff>)
 
-    @Insert
-    suspend fun insertMovieDirector(movieDirector: MovieDirector)
+    @Upsert
+    suspend fun upsertMovieActor(movieActingRole: MovieActingRole)
+
+    @Upsert
+    suspend fun upsertMovieActors(movieActingRoles: List<MovieActingRole>)
+
+    @Upsert
+    suspend fun upsertMovieDirectors(movieDirectors: List<MovieDirector>)
 }

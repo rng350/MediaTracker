@@ -29,7 +29,7 @@ import androidx.room.Index
         Index(value = ["person_id", "movie_id", "cast_id"])
     ]
 )
-data class MovieActor(
+data class MovieActingRole(
     @ColumnInfo("movie_id")
     val movieId: Int,
     @ColumnInfo("person_id")
@@ -37,5 +37,7 @@ data class MovieActor(
     @ColumnInfo("cast_id")
     val castingId: Int,
     @ColumnInfo("character_name")
-    val characterName: String
+    val characterName: String,
+    @ColumnInfo("order_of_importance")
+    val orderOfImportance: Int
 )

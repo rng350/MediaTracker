@@ -6,7 +6,7 @@ import androidx.room.TypeConverters
 import com.rng350.mediatracker.movies.LikedMovie
 import com.rng350.mediatracker.movies.MovieGenre
 import com.rng350.mediatracker.movies.Movie
-import com.rng350.mediatracker.movies.MovieActor
+import com.rng350.mediatracker.movies.MovieActingRole
 import com.rng350.mediatracker.movies.MovieDirector
 import com.rng350.mediatracker.movies.MovieGenreAssociation
 import com.rng350.mediatracker.movies.MovieStaff
@@ -18,7 +18,7 @@ import com.rng350.mediatracker.movies.WatchlistedMovie
         [
             Movie::class,
             MovieStaff::class,
-            MovieActor::class,
+            MovieActingRole::class,
             MovieDirector::class,
             MovieGenre::class,
             MovieGenreAssociation::class,
@@ -26,7 +26,7 @@ import com.rng350.mediatracker.movies.WatchlistedMovie
             WatchlistedMovie::class,
             LikedMovie::class
         ],
-    version = 1
+    version = 2
 )
 @TypeConverters(value = [RoomDatabaseTypeConverters::class])
 abstract class MediaTrackerDatabase : RoomDatabase() {

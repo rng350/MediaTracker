@@ -30,7 +30,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -50,7 +49,6 @@ import com.rng350.mediatracker.screens.common.LikeButton
 import com.rng350.mediatracker.screens.common.StaffRoleCard
 import com.rng350.mediatracker.screens.common.ToggleWatchlistButton
 import com.rng350.mediatracker.screens.common.WatchButton
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -137,7 +135,7 @@ fun MovieDetailsScreen(
                                 fontSize = 15.sp
                             )
                             val genresList = movieDetails
-                                .movieMovieGenres
+                                .movieGenres
                                 .joinToString (
                                     separator = ", ",
                                     transform = { it.genreName }

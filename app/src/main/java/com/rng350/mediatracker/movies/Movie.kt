@@ -14,7 +14,7 @@ data class Movie(
     @ColumnInfo(name="movie_title", index = true)
     val movieTitle: String,
     @ColumnInfo(name="movie_original_title")
-    val movieOriginalTitle: String,
+    val movieOriginalTitle: String? = null,
     @ColumnInfo(name="movie_release_date", index = true)
     val movieReleaseDate: LocalDate? = null,
     @ColumnInfo(name="movie_premise")

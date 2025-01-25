@@ -19,6 +19,7 @@ data class MovieSchema(
         return MovieForDisplay(
             movieId = this.id,
             movieTitle = this.title,
+            movieOriginalTitle = if (!this.originalTitle.isNullOrEmpty()) this.originalTitle else null,
             moviePremise = this.overview ?: "",
             movieReleaseDate = this.releaseDate?.toLocalDate(),
             moviePosterUrl = if (!this.posterPath.isNullOrEmpty()) TMDB_IMAGE_BASE_URL + this.posterPath else null

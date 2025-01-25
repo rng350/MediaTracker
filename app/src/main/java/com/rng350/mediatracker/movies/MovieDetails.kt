@@ -5,9 +5,10 @@ import java.time.LocalDate
 data class MovieDetails(
     val movieId: String,
     val movieTitle: String,
+    val movieOriginalTitle: String?,
     val movieOverview: String,
     val movieReleaseDate: LocalDate? = null,
-    val movieMovieGenres: List<MovieGenre>,
+    val movieGenres: List<MovieGenre>,
     val movieDirectors: List<MovieStaff>,
     val movieActors: List<MovieActorAndRolesInFilm>,
     val moviePosterUrl: String? = null,

@@ -50,7 +50,7 @@ fun StaffRoleCard(
             textAlign = TextAlign.Center
         )
         Text(
-            text = movieCharacter.personRoles.joinToString(),
+            text = movieCharacter.personRoles.joinToString { it.characterName },
             fontSize = 10.sp,
             maxLines = 3,
             overflow = TextOverflow.Ellipsis,
