@@ -14,4 +14,13 @@
     <string name="starring">Starring</string>
     <string name="genres">Genres</string>
     <string name="person_profile_picture">Person Profile Picture</string>
+    <string name="add">Add</string>
+    <string name="havent_watched">Watch</string>
+    <string name="have_watched">Watched</string>
+    <string name="add_to_watchlist">Watchlist</string>
+    <string name="tracked_item_icon">Tracked Item Icon</string>
+    <string name="like_icon">Like Icon</string>
+    <string name="liked">Liked</string>
+    <string name="like">Like</string>
+    <string name="add_movie">Add movie button</string>
 </resources>

@@ -21,11 +21,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
 import com.rng350.mediatracker.R
-import com.rng350.mediatracker.movies.MovieCharacter
+import com.rng350.mediatracker.movies.MovieActorAndRolesInFilm
 
 @Composable
 fun StaffRoleCard(
-    movieCharacter: MovieCharacter,
+    movieCharacter: MovieActorAndRolesInFilm,
     modifier: Modifier = Modifier,
     onItemClicked: () -> Unit
 ) {

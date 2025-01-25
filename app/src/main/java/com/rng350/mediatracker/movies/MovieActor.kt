@@ -25,8 +25,8 @@ import androidx.room.Index
         )
     ],
     indices = [
-        Index(value = ["movie_id", "person_id"]),
-        Index(value = ["person_id", "movie_id"])
+        Index(value = ["movie_id", "person_id", "cast_id"]),
+        Index(value = ["person_id", "movie_id", "cast_id"])
     ]
 )
 data class MovieActor(

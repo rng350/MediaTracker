@@ -48,7 +48,9 @@ fun MainScreen() {
                     val movieId = remember {
                         (screenNavigator.currentRoute.value as Route.MovieDetailsScreen).movieId
                     }
-                    MovieDetailsScreen(movieId)
+                    MovieDetailsScreen(
+                        movieId = movieId
+                    )
                 }
             }
         }

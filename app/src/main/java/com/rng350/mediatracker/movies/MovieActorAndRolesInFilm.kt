@@ -2,7 +2,7 @@ package com.rng350.mediatracker.movies
 
 import android.net.Uri
 
-data class MovieCharacter(
+data class MovieActorAndRolesInFilm(
     val personId: Int,
     val personName: String,
     val personRoles: List<String>,

@@ -3,8 +3,8 @@ package com.rng350.mediatracker.networking.movie
 import com.rng350.mediatracker.common.Constants.NUMBER_OF_ACTORS_IN_MOVIE_DETAILS
 import com.rng350.mediatracker.common.Constants.TMDB_IMAGE_BASE_URL
 import com.rng350.mediatracker.common.toLocalDate
-import com.rng350.mediatracker.movies.Genre
-import com.rng350.mediatracker.movies.MovieCharacter
+import com.rng350.mediatracker.movies.MovieGenre
+import com.rng350.mediatracker.movies.MovieActorAndRolesInFilm
 import com.rng350.mediatracker.movies.MovieDetails
 import com.rng350.mediatracker.movies.MovieStaff
 import com.squareup.moshi.Json
@@ -54,7 +54,7 @@ data class MovieDetailsSchema(
             movieTitle = movieTitle ?: "Untitled Movie",
             movieOverview = movieOverview ?: "No",
             movieReleaseDate = movieReleaseDate?.toLocalDate(),
-            movieGenres = movieGenres?.map { Genre(genreId = it.genreId, genreName = it.genreName) } ?: emptyList(),
+            movieMovieGenres = movieGenres?.map { MovieGenre(genreId = it.genreId, genreName = it.genreName) } ?: emptyList(),
             movieDirectors = movieCredits
                 ?.movieCrew
                 ?.filter { it.job == "Director" }
@@ -69,7 +69,7 @@ data class MovieDetailsSchema(
                 ?.movieCast
                 ?.groupBy { it.actorId }
                 ?.map { (actorId, actorGroup) ->
-                    MovieCharacter(
+                    MovieActorAndRolesInFilm(
                         personId = actorId.toInt(),
                         personName = actorGroup.first().actorName,
                         personProfilePicUri = null,

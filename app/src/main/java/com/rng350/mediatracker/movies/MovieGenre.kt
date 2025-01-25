@@ -4,8 +4,8 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "genre_table")
-data class Genre(
+@Entity(tableName = "movie_genre_table")
+data class MovieGenre(
     @PrimaryKey
     @ColumnInfo("genre_id", index = true)
     val genreId: Int,

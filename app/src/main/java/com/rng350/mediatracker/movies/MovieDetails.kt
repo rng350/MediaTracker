@@ -7,8 +7,11 @@ data class MovieDetails(
     val movieTitle: String,
     val movieOverview: String,
     val movieReleaseDate: LocalDate? = null,
-    val movieGenres: List<Genre>,
+    val movieMovieGenres: List<MovieGenre>,
     val movieDirectors: List<MovieStaff>,
-    val movieActors: List<MovieCharacter>,
-    val moviePosterUrl: String? = null
+    val movieActors: List<MovieActorAndRolesInFilm>,
+    val moviePosterUrl: String? = null,
+    val isLiked: Boolean = false,
+    val isOnWatchlist: Boolean = false,
+    val hasBeenWatched: Boolean = false
 )
