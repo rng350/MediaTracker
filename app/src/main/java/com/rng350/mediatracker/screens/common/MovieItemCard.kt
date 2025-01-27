@@ -41,6 +41,7 @@ fun MovieItemCard(
         Row(verticalAlignment = Alignment.Top) {
             AsyncImage(
                 model = movie.moviePosterUri ?: movie.moviePosterUrl,
+                fallback = painterResource(R.drawable.blank_poster),
                 placeholder = painterResource(R.drawable.blank_poster),
                 contentDescription = stringResource(R.string.movie_poster),
                 contentScale = ContentScale.Crop,

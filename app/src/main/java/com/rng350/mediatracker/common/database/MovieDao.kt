@@ -109,11 +109,18 @@ interface MovieDao {
                 movie_premise AS moviePremise, 
                 movie_poster_url AS moviePosterUrl, 
                 movie_poster_uri AS moviePosterUri 
-            FROM movie_table 
+            FROM movie_table
             WHERE movie_id IN (SELECT movie_id FROM movie_watchlist_table)
             ORDER BY 
-                CASE WHEN movie_release_date IS NULL THEN 1 ELSE 0 END ASC, 
-                datetime(movie_release_date) ASC 
+                CASE 
+                    WHEN movie_release_date IS NULL THEN 3 
+                    WHEN datetime(movie_release_date) > datetime('now') THEN 2 
+                    ELSE 1 
+                END ASC,
+                CASE WHEN datetime(movie_release_date) <= datetime('now') THEN movie_title END ASC,
+                CASE WHEN datetime(movie_release_date) > datetime('now') THEN datetime(movie_release_date) END ASC, 
+                CASE WHEN datetime(movie_release_date) > datetime('now') THEN movie_title END ASC,
+                CASE WHEN movie_release_date IS NULL THEN movie_title END ASC
         """
     )
     fun getAllWatchlistedMovies(): Flow<List<MovieForDisplay>>
