@@ -83,7 +83,7 @@ fun WatchlistScreen(
                             MovieReleaseDateHeader(stringResource(R.string.later_this_month))
                         }
                     }
-                    if ((((currentMovie.movieReleaseDate.year==LocalDate.now().year)
+                    else if ((((currentMovie.movieReleaseDate.year==LocalDate.now().year)
                                 && ((currentMovie.movieReleaseDate.month.value-LocalDate.now().month.value)==1))
                         ||
                             ((currentMovie.movieReleaseDate.year-LocalDate.now().year==1)

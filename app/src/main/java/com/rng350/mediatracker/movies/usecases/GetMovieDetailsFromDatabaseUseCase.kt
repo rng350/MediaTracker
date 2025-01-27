@@ -3,7 +3,6 @@ package com.rng350.mediatracker.movies.usecases
 import com.rng350.mediatracker.common.database.MovieDao
 import com.rng350.mediatracker.movies.MovieActorAndRolesInFilm
 import com.rng350.mediatracker.movies.MovieDetails
-import com.rng350.mediatracker.movies.MovieDirector
 import com.rng350.mediatracker.movies.MovieGenre
 import com.rng350.mediatracker.movies.MovieStaff
 import com.rng350.mediatracker.movies.RoleAndImportance
@@ -23,8 +22,17 @@ class GetMovieDetailsFromDatabaseUseCase @Inject constructor(
                 .groupBy { it.genreId }
             val directorsMap = fetchedMovieDetails
                 .filter { it.directorPersonId!=null }
-                .map { MovieDirector(movieId=it.movieId, personId = it.directorPersonId!!) }
-                .groupBy { it.personId }
+                .groupBy { it.directorPersonId!! }
+            val directors = directorsMap.keys.mapNotNull { directorId ->
+                val first = directorsMap[directorId]?.first()
+                if (first!=null)
+                    MovieStaff(
+                        personId = directorId,
+                        personName = first.directorPersonName ?: "",
+                        personProfilePicUri = null,
+                        personProfilePicUrl = null)
+                else null
+            }
             val actors = fetchedMovieDetails
                 .filter { it.actorPersonId!=null }
                 .groupBy { it.actorPersonId!! }
@@ -37,7 +45,7 @@ class GetMovieDetailsFromDatabaseUseCase @Inject constructor(
                             orderOfImportance = role.actingRoleOrderOfImportance
                         )
                     } else null
-                } ?: listOf()
+                }?.distinctBy { it.castingId } ?: listOf()
                 MovieActorAndRolesInFilm(
                     personId = actorId,
                     personName = actors[actorId]?.first()?.actorPersonName ?: "",
@@ -59,12 +67,7 @@ class GetMovieDetailsFromDatabaseUseCase @Inject constructor(
                         MovieGenre(first.genreId, first.genreName)
                     else null
                 },
-                movieDirectors = directorsMap.keys.mapNotNull { directorId ->
-                    val first = directorsMap[directorId]?.first()
-                    if (first!=null)
-                        MovieStaff(firstMovieDetailsRow.movieId, first.personId.toString(), null, null)
-                    else null
-                },
+                movieDirectors = directors,
                 movieActors = actorsAndRoles,
                 moviePosterUrl = firstMovieDetailsRow.moviePosterUrl,
                 isLiked = firstMovieDetailsRow.isLiked,
