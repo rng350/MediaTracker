@@ -110,6 +110,7 @@ interface MovieDao {
                 movie_poster_url AS moviePosterUrl, 
                 movie_poster_uri AS moviePosterUri 
             FROM movie_table 
+            WHERE movie_id IN (SELECT movie_id FROM movie_watchlist_table)
             ORDER BY 
                 CASE WHEN movie_release_date IS NULL THEN 1 ELSE 0 END ASC, 
                 datetime(movie_release_date) ASC 

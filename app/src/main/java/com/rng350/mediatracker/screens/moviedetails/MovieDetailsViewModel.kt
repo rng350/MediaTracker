@@ -49,6 +49,14 @@ class MovieDetailsViewModel @Inject constructor(
                     MovieDetailsResult.Success(fetchResult.movieDetails)
                 }
             }
+            when (movieDetailsDisplayResult) {
+                is MovieDetailsResult.Success -> {
+                    _movieIsLiked.update { movieDetailsDisplayResult.movieDetails.isLiked }
+                    _movieIsOnWatchlist.update { movieDetailsDisplayResult.movieDetails.isOnWatchlist }
+                    _movieHasBeenWatched.update { movieDetailsDisplayResult.movieDetails.hasBeenWatched }
+                }
+                else -> {}
+            }
             _movieDetails.update { movieDetailsDisplayResult }
         }
     }
