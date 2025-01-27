@@ -17,7 +17,7 @@ data class MovieSchema(
 ) {
     fun toMovieForDisplay(): MovieForDisplay {
         return MovieForDisplay(
-            movieId = this.id,
+            movieId = this.id.toInt(),
             movieTitle = this.title,
             movieOriginalTitle = if (!this.originalTitle.isNullOrEmpty()) this.originalTitle else null,
             moviePremise = this.overview ?: "",

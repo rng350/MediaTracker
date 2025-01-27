@@ -8,6 +8,8 @@ sealed class Route(val routeName: String) {
         override val navCommand: String
             get() = routeName.replace("{movieId}", movieId)
     }
+    data object MovieWatchlistScreen: Route("watchlistScreen")
+    data object WatchedMoviesListScreen: Route("watchedMovies")
 
     open val navCommand = routeName
 }

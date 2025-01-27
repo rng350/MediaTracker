@@ -8,7 +8,9 @@ import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Upsert
 import com.rng350.mediatracker.movies.Movie
+import com.rng350.mediatracker.movies.MovieForDisplay
 import com.rng350.mediatracker.movies.WatchlistedMovie
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface MovieDao {
@@ -38,4 +40,22 @@ interface MovieDao {
 
     @Query("SELECT * FROM movie_table WHERE movie_id=:movieId")
     suspend fun getMovie(movieId: Int): Movie?
+
+    @Query(
+        """
+            SELECT
+                movie_id AS movieId, 
+                movie_title AS movieTitle, 
+                movie_original_title AS movieOriginalTitle, 
+                movie_release_date AS movieReleaseDate, 
+                movie_premise AS moviePremise, 
+                movie_poster_url AS moviePosterUrl, 
+                movie_poster_uri AS moviePosterUri 
+            FROM movie_table 
+            ORDER BY 
+                CASE WHEN movie_release_date IS NULL THEN 1 ELSE 0 END ASC, 
+                datetime(movie_release_date) ASC 
+        """
+    )
+    fun getAllWatchlistedMovies(): Flow<List<MovieForDisplay>>
 }

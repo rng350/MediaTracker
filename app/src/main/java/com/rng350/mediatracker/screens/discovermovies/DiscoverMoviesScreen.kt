@@ -74,7 +74,7 @@ fun DiscoverMoviesScreen(
                     MovieItemCard(
                         movie = movie,
                         modifier = Modifier,
-                        onMovieClicked = { onMovieClicked(movie.movieId) }
+                        onMovieClicked = { onMovieClicked(movie.movieId.toString()) }
                     )
                 }
                 if (isLoading()) {
