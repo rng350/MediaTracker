@@ -25,7 +25,7 @@
     <string name="add_movie">Add movie button</string>
     <string name="search_movie_watchlist">Search Movie Watchlist</string>
     <string name="out_now">Out Now</string>
-    <string name="this_month">This Month</string>
+    <string name="later_this_month">Later This Month</string>
     <string name="next_month">Next Month</string>
     <string name="no_release_date_header">No Release Date</string>
     <string name="movie_watchlist">Watchlist</string>

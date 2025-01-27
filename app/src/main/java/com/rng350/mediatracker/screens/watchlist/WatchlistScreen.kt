@@ -79,8 +79,8 @@ fun WatchlistScreen(
                             || (currentMovie.movieReleaseDate.year != previousMovie.movieReleaseDate?.year))
 
                     if ((currentMovie.movieReleaseDate.year == LocalDate.now().year) && (currentMovie.movieReleaseDate.month == LocalDate.now().month)) {
-                        if (previousMovieNonexistantOrReleasedOnDifferentMonthAndYear) {
-                            MovieReleaseDateHeader(stringResource(R.string.this_month))
+                        if ((previousMovie==null) || previousMovie.movieReleaseDate?.isBefore(LocalDate.now())==true) {
+                            MovieReleaseDateHeader(stringResource(R.string.later_this_month))
                         }
                     }
                     if ((((currentMovie.movieReleaseDate.year==LocalDate.now().year)
