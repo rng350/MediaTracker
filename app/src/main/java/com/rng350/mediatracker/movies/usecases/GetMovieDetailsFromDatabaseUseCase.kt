@@ -46,7 +46,7 @@ class GetMovieDetailsFromDatabaseUseCase @Inject constructor(
                     personProfilePicUri = actors[actorId]?.first()?.actorPersonProfilePicUri,
                     orderOfImportance = actorRoles.minOf { it.orderOfImportance }
                 )
-            }
+            }.sortedBy { it.orderOfImportance }
             return MovieDetails(
                 movieId = firstMovieDetailsRow.movieId.toString(),
                 movieTitle = firstMovieDetailsRow.movieTitle,
