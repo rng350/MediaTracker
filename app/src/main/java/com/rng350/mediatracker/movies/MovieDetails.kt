@@ -1,5 +1,6 @@
 package com.rng350.mediatracker.movies
 
+import android.net.Uri
 import java.time.LocalDate
 
 data class MovieDetails(
@@ -12,6 +13,7 @@ data class MovieDetails(
     val movieDirectors: List<MovieStaff>,
     val movieActors: List<MovieActorAndRolesInFilm>,
     val moviePosterUrl: String? = null,
+    val moviePosterUri: Uri? = null,
     val isLiked: Boolean = false,
     val isOnWatchlist: Boolean = false,
     val hasBeenWatched: Boolean = false

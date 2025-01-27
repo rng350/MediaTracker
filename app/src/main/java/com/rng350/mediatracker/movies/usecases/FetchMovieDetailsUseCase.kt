@@ -9,7 +9,8 @@ import javax.inject.Inject
 
 class FetchMovieDetailsUseCase @Inject constructor(
     private val tmdbApi: TMDBApi,
-    private val movieDetailsCache: MovieDetailsCache
+    private val movieDetailsCache: MovieDetailsCache,
+    private val getMovieDetailsFromDatabaseUseCase: GetMovieDetailsFromDatabaseUseCase
 ) {
     sealed class MovieDetailsResult {
         data class Success(val movieDetails: MovieDetails): MovieDetailsResult()
@@ -18,7 +19,9 @@ class FetchMovieDetailsUseCase @Inject constructor(
 
     suspend operator fun invoke(movieId: String): MovieDetailsResult {
         return withContext(Dispatchers.IO) {
-            val movieDetails = movieDetailsCache.get(movieId) ?: remotelyFetchMovieDetails(movieId)
+            val movieDetails = movieDetailsCache.get(movieId)
+                ?: getMovieDetailsFromDatabaseUseCase(movieId.toInt())
+                ?: remotelyFetchMovieDetails(movieId)
             if (movieDetails != null) {
                 movieDetailsCache.updateCache(key = movieDetails.movieId, updatedValue =  movieDetails)
                 MovieDetailsResult.Success(movieDetails)
