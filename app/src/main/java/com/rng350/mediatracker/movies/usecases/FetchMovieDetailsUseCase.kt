@@ -5,6 +5,7 @@ import com.rng350.mediatracker.movies.MovieDetailsCache
 import com.rng350.mediatracker.networking.TMDBApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import okio.IOException
 import javax.inject.Inject
 
 class FetchMovieDetailsUseCase @Inject constructor(
@@ -31,6 +32,12 @@ class FetchMovieDetailsUseCase @Inject constructor(
     }
 
     private suspend fun remotelyFetchMovieDetails(movieId: String): MovieDetails? {
-        return tmdbApi.getMovieDetails(movieId).body()?.toMovieDetailsForDisplay()
+        return try {
+            tmdbApi.getMovieDetails(movieId).body()?.toMovieDetailsForDisplay()
+        }
+        // Network connectivity issue
+        catch(e: IOException) {
+            null
+        }
     }
 }
