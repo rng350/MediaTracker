@@ -7,9 +7,11 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Upsert
+import com.rng350.mediatracker.movies.LikedMovie
 import com.rng350.mediatracker.movies.Movie
 import com.rng350.mediatracker.movies.MovieDetailsFetched
 import com.rng350.mediatracker.movies.MovieForDisplay
+import com.rng350.mediatracker.movies.WatchedMovie
 import com.rng350.mediatracker.movies.WatchlistedMovie
 import kotlinx.coroutines.flow.Flow
 
@@ -35,6 +37,18 @@ interface MovieDao {
 
     @Delete
     suspend fun removeMovieFromWatchlist(watchlistedMovie: WatchlistedMovie)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun addMovieToWatchedList(watchedMovie: WatchedMovie)
+
+    @Delete
+    suspend fun removeMovieFromWatchedlist(watchedMovie: WatchedMovie)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun addMovieToLikedList(likedMovie: LikedMovie)
+
+    @Delete
+    suspend fun removeMovieFromLikedList(likedMovie: LikedMovie)
 
     @Query("SELECT * FROM movie_watchlist_table WHERE movie_id=:movieId")
     suspend fun getWatchlistedMovie(movieId: Int): WatchlistedMovie?
@@ -114,14 +128,31 @@ interface MovieDao {
             ORDER BY 
                 CASE 
                     WHEN movie_release_date IS NULL THEN 3 
-                    WHEN datetime(movie_release_date) > datetime('now') THEN 2 
+                    WHEN movie_release_date > strftime('%Y-%m-%d', 'now', 'localtime') THEN 2 
                     ELSE 1 
                 END ASC,
-                CASE WHEN datetime(movie_release_date) <= datetime('now') THEN movie_title END ASC,
-                CASE WHEN datetime(movie_release_date) > datetime('now') THEN datetime(movie_release_date) END ASC, 
-                CASE WHEN datetime(movie_release_date) > datetime('now') THEN movie_title END ASC,
+                CASE WHEN movie_release_date <= strftime('%Y-%m-%d', 'now', 'localtime') THEN movie_title END ASC,
+                CASE WHEN movie_release_date > strftime('%Y-%m-%d', 'now', 'localtime') THEN movie_release_date END ASC, 
+                CASE WHEN movie_release_date > strftime('%Y-%m-%d', 'now', 'localtime') THEN movie_title END ASC,
                 CASE WHEN movie_release_date IS NULL THEN movie_title END ASC
         """
     )
     fun getAllWatchlistedMovies(): Flow<List<MovieForDisplay>>
+
+    @Query(
+        """
+            SELECT
+                movie_id AS movieId, 
+                movie_title AS movieTitle, 
+                movie_original_title AS movieOriginalTitle, 
+                movie_release_date AS movieReleaseDate, 
+                movie_premise AS moviePremise, 
+                movie_poster_url AS moviePosterUrl, 
+                movie_poster_uri AS moviePosterUri 
+            FROM movie_table
+            WHERE movie_id IN (SELECT movie_id FROM watched_movie_table)
+            ORDER BY movie_title ASC
+        """
+    )
+    fun getAllWatchedMovies(): Flow<List<MovieForDisplay>>
 }
