@@ -66,7 +66,7 @@ fun WatchlistScreen(
                 if (
                     index==0
                     && currentMovie.movieReleaseDate!=null
-                    && currentMovie.movieReleaseDate.isBefore(LocalDate.now())
+                    && !currentMovie.movieReleaseDate.isAfter(LocalDate.now())
                 ) {
                     MovieReleaseDateHeader(stringResource(R.string.out_now))
                 }

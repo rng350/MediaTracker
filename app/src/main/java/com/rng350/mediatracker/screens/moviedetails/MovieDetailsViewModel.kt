@@ -3,8 +3,10 @@ package com.rng350.mediatracker.screens.moviedetails
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.rng350.mediatracker.movies.MovieDetails
+import com.rng350.mediatracker.movies.usecases.AddMovieToWatchedMoviesListUseCase
 import com.rng350.mediatracker.movies.usecases.AddMovieToWatchlistUseCase
 import com.rng350.mediatracker.movies.usecases.FetchMovieDetailsUseCase
+import com.rng350.mediatracker.movies.usecases.RemoveMovieFromWatchedMoviesListUseCase
 import com.rng350.mediatracker.movies.usecases.RemoveMovieFromWatchlistUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -19,7 +21,9 @@ import javax.inject.Inject
 class MovieDetailsViewModel @Inject constructor(
     private val fetchMovieDetailsUseCase: FetchMovieDetailsUseCase,
     private val addMovieToWatchlistUseCase: AddMovieToWatchlistUseCase,
-    private val removeMovieFromWatchlistUseCase: RemoveMovieFromWatchlistUseCase
+    private val removeMovieFromWatchlistUseCase: RemoveMovieFromWatchlistUseCase,
+    private val addMovieToWatchedMoviesListUseCase: AddMovieToWatchedMoviesListUseCase,
+    private val removeMovieFromWatchedMoviesListUseCase: RemoveMovieFromWatchedMoviesListUseCase
 ): ViewModel() {
     sealed class MovieDetailsResult {
         data class Success(val movieDetails: MovieDetails): MovieDetailsResult()
@@ -80,6 +84,16 @@ class MovieDetailsViewModel @Inject constructor(
     }
 
     fun toggleWatchedMovie(movieId: String) {
-        _movieHasBeenWatched.update { !_movieHasBeenWatched.value }
+        (movieDetails.value as? MovieDetailsResult.Success)
+            ?.movieDetails
+            ?.let { movie ->
+                viewModelScope.launch {
+                    when (movieHasBeenWatched.value) {
+                        true -> removeMovieFromWatchedMoviesListUseCase(movie)
+                        false -> addMovieToWatchedMoviesListUseCase(movie)
+                    }
+                }
+                _movieHasBeenWatched.update { !_movieHasBeenWatched.value }
+            }
     }
 }

@@ -103,7 +103,9 @@ fun MainScreen() {
                         startDestination = Route.WatchedMoviesListScreen.routeName
                     ) {
                         composable(route = Route.WatchedMoviesListScreen.routeName) {
-                            WatchedMoviesListScreen()
+                            WatchedMoviesListScreen( onMovieClicked = { movieId ->
+                                screenNavigator.navigateToRoute(Route.MovieDetailsScreen(movieId))
+                            })
                         }
                         composable(route = Route.MovieDetailsScreen().routeName) {
                             val movieId = remember {

@@ -3,6 +3,8 @@ package com.rng350.mediatracker.screens.common
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
@@ -46,8 +48,8 @@ fun MovieItemCard(
                 contentDescription = stringResource(R.string.movie_poster),
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
-                    .width(100.dp)
-                    .height(150.dp)
+                    .fillMaxHeight()
+                    .aspectRatio(ratio = 0.6666667f, matchHeightConstraintsFirst = true)
             )
             Column(
                 modifier = Modifier
