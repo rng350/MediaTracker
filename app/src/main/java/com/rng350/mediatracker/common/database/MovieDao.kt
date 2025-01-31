@@ -11,6 +11,7 @@ import com.rng350.mediatracker.movies.LikedMovie
 import com.rng350.mediatracker.movies.Movie
 import com.rng350.mediatracker.movies.MovieDetailsFetched
 import com.rng350.mediatracker.movies.MovieForDisplay
+import com.rng350.mediatracker.movies.MovieUserStatus
 import com.rng350.mediatracker.movies.WatchedMovie
 import com.rng350.mediatracker.movies.WatchlistedMovie
 import kotlinx.coroutines.flow.Flow
@@ -155,4 +156,25 @@ interface MovieDao {
         """
     )
     fun getAllWatchedMovies(): Flow<List<MovieForDisplay>>
+
+    @Query("""
+        SELECT 
+            CASE WHEN (
+                    SELECT movie_id 
+                    FROM liked_movie_table 
+                    WHERE movie_id=:movieId
+            ) IS NOT NULL THEN 1 ELSE 0 END AS isLiked,
+            CASE WHEN (
+                SELECT movie_id 
+                FROM movie_watchlist_table 
+                WHERE movie_id=:movieId
+            ) IS NOT NULL THEN 1 ELSE 0 END AS isInWatchlist,
+            CASE WHEN ( 
+                SELECT movie_id 
+                FROM watched_movie_table 
+                WHERE movie_id=:movieId
+            ) IS NOT NULL THEN 1 ELSE 0 END AS hasBeenWatched 
+        LIMIT 1
+    """)
+    suspend fun getMovieUserStatus(movieId: Int): MovieUserStatus
 }

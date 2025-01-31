@@ -3,9 +3,11 @@ package com.rng350.mediatracker.screens.moviedetails
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.rng350.mediatracker.movies.MovieDetails
+import com.rng350.mediatracker.movies.usecases.AddMovieToLikedListUseCase
 import com.rng350.mediatracker.movies.usecases.AddMovieToWatchedMoviesListUseCase
 import com.rng350.mediatracker.movies.usecases.AddMovieToWatchlistUseCase
 import com.rng350.mediatracker.movies.usecases.FetchMovieDetailsUseCase
+import com.rng350.mediatracker.movies.usecases.RemoveMovieFromLikedListUseCase
 import com.rng350.mediatracker.movies.usecases.RemoveMovieFromWatchedMoviesListUseCase
 import com.rng350.mediatracker.movies.usecases.RemoveMovieFromWatchlistUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -23,7 +25,9 @@ class MovieDetailsViewModel @Inject constructor(
     private val addMovieToWatchlistUseCase: AddMovieToWatchlistUseCase,
     private val removeMovieFromWatchlistUseCase: RemoveMovieFromWatchlistUseCase,
     private val addMovieToWatchedMoviesListUseCase: AddMovieToWatchedMoviesListUseCase,
-    private val removeMovieFromWatchedMoviesListUseCase: RemoveMovieFromWatchedMoviesListUseCase
+    private val removeMovieFromWatchedMoviesListUseCase: RemoveMovieFromWatchedMoviesListUseCase,
+    private val addMovieToLikedListUseCase: AddMovieToLikedListUseCase,
+    private val removeMovieFromLikedListUseCase: RemoveMovieFromLikedListUseCase
 ): ViewModel() {
     sealed class MovieDetailsResult {
         data class Success(val movieDetails: MovieDetails): MovieDetailsResult()
@@ -65,7 +69,7 @@ class MovieDetailsViewModel @Inject constructor(
         }
     }
 
-    fun toggleToWatchList(movieId: String) {
+    fun toggleToWatchList() {
         (movieDetails.value as? MovieDetailsResult.Success)
             ?.movieDetails
             ?.let { movie ->
@@ -79,11 +83,21 @@ class MovieDetailsViewModel @Inject constructor(
             }
     }
 
-    fun toggleLikeMovie(movieId: String) {
-        _movieIsLiked.update { !_movieIsLiked.value }
+    fun toggleLikeMovie() {
+        (movieDetails.value as? MovieDetailsResult.Success)
+            ?.movieDetails
+            ?.let { movie ->
+                viewModelScope.launch {
+                    when (movieIsLiked.value) {
+                        true -> removeMovieFromLikedListUseCase(movie)
+                        false -> addMovieToLikedListUseCase(movie)
+                    }
+                }
+                _movieIsLiked.update { !_movieIsLiked.value }
+            }
     }
 
-    fun toggleWatchedMovie(movieId: String) {
+    fun toggleWatchedMovie() {
         (movieDetails.value as? MovieDetailsResult.Success)
             ?.movieDetails
             ?.let { movie ->

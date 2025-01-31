@@ -53,16 +53,16 @@ class CustomLinkedHashMap<K, V> @Inject constructor() {
     class KeyAndValue<K, V>(val key: K, val value: V)
 
     fun putAtFrontOfList(key: K, newElement: V) {
+        val potentialSameValue = hashMap[key]
+        if (potentialSameValue != null) {
+            removeNode(potentialSameValue)
+        }
         val newFirstNode = Node(KeyAndValue(key, newElement))
         newFirstNode.nextNode = _firstNode
         newFirstNode.previousNode = null
         _firstNode?.previousNode = newFirstNode
         _firstNode = newFirstNode
 
-        val potentialSameValue = hashMap[key]
-        if (potentialSameValue != null) {
-            removeNode(potentialSameValue)
-        }
         hashMap[key] = newFirstNode
         _listSize++
         if (listSize == 1) {
@@ -71,16 +71,15 @@ class CustomLinkedHashMap<K, V> @Inject constructor() {
     }
 
     fun putAtEndOfList(key: K, newElement: V) {
+        val potentialSameValue = hashMap[key]
+        if (potentialSameValue != null) {
+            removeNode(potentialSameValue)
+        }
         val newLastNode = Node(KeyAndValue(key, newElement))
         newLastNode.previousNode = _lastNode
         newLastNode.nextNode = null
         _lastNode?.nextNode = newLastNode
         _lastNode = newLastNode
-
-        val potentialSameValue = hashMap[key]
-        if (potentialSameValue != null) {
-            removeNode(potentialSameValue)
-        }
         hashMap[key] = newLastNode
         _listSize++
         if (listSize==1) {

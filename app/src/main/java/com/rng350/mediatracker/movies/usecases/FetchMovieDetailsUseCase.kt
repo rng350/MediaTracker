@@ -2,16 +2,14 @@ package com.rng350.mediatracker.movies.usecases
 
 import com.rng350.mediatracker.movies.MovieDetails
 import com.rng350.mediatracker.movies.MovieDetailsCache
-import com.rng350.mediatracker.networking.TMDBApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import okio.IOException
 import javax.inject.Inject
 
 class FetchMovieDetailsUseCase @Inject constructor(
-    private val tmdbApi: TMDBApi,
     private val movieDetailsCache: MovieDetailsCache,
-    private val getMovieDetailsFromDatabaseUseCase: GetMovieDetailsFromDatabaseUseCase
+    private val getMovieDetailsFromDatabaseUseCase: GetMovieDetailsFromDatabaseUseCase,
+    private val remotelyFetchMovieDetails: FetchMovieDetailsRemotelyUseCase
 ) {
     sealed class MovieDetailsResult {
         data class Success(val movieDetails: MovieDetails): MovieDetailsResult()
@@ -28,16 +26,6 @@ class FetchMovieDetailsUseCase @Inject constructor(
                 MovieDetailsResult.Success(movieDetails)
             }
             else MovieDetailsResult.Error
-        }
-    }
-
-    private suspend fun remotelyFetchMovieDetails(movieId: String): MovieDetails? {
-        return try {
-            tmdbApi.getMovieDetails(movieId).body()?.toMovieDetailsForDisplay()
-        }
-        // Network connectivity issue
-        catch(e: IOException) {
-            null
         }
     }
 }

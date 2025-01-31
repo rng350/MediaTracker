@@ -217,17 +217,17 @@ fun MovieDetailsScreen(
                                     ) {
                                         val movieWatchedIconSate = viewModel.movieHasBeenWatched.collectAsState()
                                         WatchButton(
-                                            onClick = { viewModel.toggleWatchedMovie(movieId) },
+                                            onClick = { viewModel.toggleWatchedMovie() },
                                             isActivated = movieWatchedIconSate.value
                                         )
                                         val movieIsLikedIconState = viewModel.movieIsLiked.collectAsState()
                                         LikeButton(
-                                            onClick = { viewModel.toggleLikeMovie(movieId) },
+                                            onClick = { viewModel.toggleLikeMovie() },
                                             isActivated = movieIsLikedIconState.value
                                         )
                                         val movieIsOnWatchlistIconState = viewModel.movieIsOnWatchlist.collectAsState()
                                         ToggleWatchlistButton(
-                                            onClick = { viewModel.toggleToWatchList(movieId) },
+                                            onClick = { viewModel.toggleToWatchList() },
                                             isActivated = movieIsOnWatchlistIconState.value
                                         )
                                     }
