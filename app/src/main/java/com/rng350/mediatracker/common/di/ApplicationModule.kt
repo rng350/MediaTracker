@@ -7,6 +7,7 @@ import androidx.room.Room
 import coil3.ImageLoader
 import com.rng350.mediatracker.BuildConfig
 import com.rng350.mediatracker.common.Constants
+import com.rng350.mediatracker.common.SaveImageFromURLUseCase
 import com.rng350.mediatracker.common.database.MediaTrackerDatabase
 import com.rng350.mediatracker.common.database.MovieDao
 import com.rng350.mediatracker.common.database.MovieGenreDao
@@ -27,7 +28,6 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 class ApplicationModule {
-
     @Provides
     @Singleton
     fun retrofit(): Retrofit {

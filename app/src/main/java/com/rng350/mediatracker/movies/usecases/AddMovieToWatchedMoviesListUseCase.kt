@@ -7,15 +7,13 @@ import com.rng350.mediatracker.movies.WatchedMovie
 import javax.inject.Inject
 
 class AddMovieToWatchedMoviesListUseCase @Inject constructor(
-    private val saveMovieDetailsToDatabseUseCase: SaveMovieDetailsToDatabseUseCase,
+    private val saveMovieDetailsToDatabaseUseCase: SaveMovieDetailsToDatabaseUseCase,
     private val movieDao: MovieDao,
     private val movieDetailsCache: MovieDetailsCache
 ) {
     suspend operator fun invoke(movieDetails: MovieDetails) {
         val movieId = movieDetails.movieId.toInt()
-        if (movieDao.getMovie(movieId) == null) {
-            saveMovieDetailsToDatabseUseCase(movieDetails)
-        }
+        saveMovieDetailsToDatabaseUseCase(movieDetails)
         movieDao.addMovieToWatchedList(WatchedMovie(movieId = movieDetails.movieId.toInt()))
         movieDetailsCache.updateCache(
             key = movieId.toString(),
