@@ -3,6 +3,10 @@ package com.rng350.mediatracker.common.database
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import com.rng350.mediatracker.featuredmovies.FeaturedMovieNowPlaying
+import com.rng350.mediatracker.featuredmovies.FeaturedMovieTrendingThisWeek
+import com.rng350.mediatracker.featuredmovies.FeaturedMovieTrendingToday
+import com.rng350.mediatracker.featuredmovies.FeaturedMovieUpcoming
 import com.rng350.mediatracker.movies.LikedMovie
 import com.rng350.mediatracker.movies.MovieGenre
 import com.rng350.mediatracker.movies.Movie
@@ -24,9 +28,13 @@ import com.rng350.mediatracker.movies.WatchlistedMovie
             MovieGenreAssociation::class,
             WatchedMovie::class,
             WatchlistedMovie::class,
-            LikedMovie::class
+            LikedMovie::class,
+            FeaturedMovieNowPlaying::class,
+            FeaturedMovieUpcoming::class,
+            FeaturedMovieTrendingToday::class,
+            FeaturedMovieTrendingThisWeek::class
         ],
-    version = 2
+    version = 3
 )
 @TypeConverters(value = [RoomDatabaseTypeConverters::class])
 abstract class MediaTrackerDatabase : RoomDatabase() {

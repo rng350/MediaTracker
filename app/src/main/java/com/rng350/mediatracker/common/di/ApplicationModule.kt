@@ -13,6 +13,7 @@ import com.rng350.mediatracker.common.database.MovieDao
 import com.rng350.mediatracker.common.database.MovieGenreDao
 import com.rng350.mediatracker.common.database.MovieStaffDao
 import com.rng350.mediatracker.networking.TMDBApi
+import com.rng350.mediatracker.networking.TmdbApiTimer
 import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides
@@ -92,4 +93,7 @@ class ApplicationModule {
     fun imageLoader(@ApplicationContext context: Context): ImageLoader {
         return ImageLoader.Builder(context).build()
     }
+
+    @Provides
+    fun tmdbApiTimer(): TmdbApiTimer = TmdbApiTimer()
 }

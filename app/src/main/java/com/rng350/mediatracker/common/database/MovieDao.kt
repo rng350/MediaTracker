@@ -7,6 +7,10 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Upsert
+import com.rng350.mediatracker.featuredmovies.FeaturedMovieNowPlaying
+import com.rng350.mediatracker.featuredmovies.FeaturedMovieTrendingThisWeek
+import com.rng350.mediatracker.featuredmovies.FeaturedMovieTrendingToday
+import com.rng350.mediatracker.featuredmovies.FeaturedMovieUpcoming
 import com.rng350.mediatracker.movies.LikedMovie
 import com.rng350.mediatracker.movies.Movie
 import com.rng350.mediatracker.movies.MovieDetailsFetched
@@ -177,4 +181,40 @@ interface MovieDao {
         LIMIT 1
     """)
     suspend fun getMovieUserStatus(movieId: Int): MovieUserStatus
+
+    @Query("SELECT * FROM featured_movies_now_playing_table")
+    suspend fun getMoviesNowPlaying(): List<FeaturedMovieNowPlaying>
+
+    @Query("SELECT * FROM featured_movies_trending_today_table")
+    suspend fun getMoviesTrendingToday(): List<FeaturedMovieTrendingToday>
+
+    @Query("SELECT * FROM featured_movies_trending_this_week_table")
+    suspend fun getMoviesTrendingThisWeek(): List<FeaturedMovieTrendingThisWeek>
+
+    @Query("SELECT * FROM featured_movies_upcoming_table")
+    suspend fun getFeaturedMoviesUpcoming(): List<FeaturedMovieUpcoming>
+
+    @Insert
+    suspend fun insertMoviesNowPlaying(movies: List<FeaturedMovieNowPlaying>)
+
+    @Insert
+    suspend fun insertMoviesTrendingToday(movies: List<FeaturedMovieTrendingToday>)
+
+    @Insert
+    suspend fun insertMoviesTrendingThisWeek(movies: List<FeaturedMovieTrendingThisWeek>)
+
+    @Insert
+    suspend fun insertMoviesUpcoming(movies: List<FeaturedMovieUpcoming>)
+
+    @Query("DELETE FROM featured_movies_now_playing_table")
+    suspend fun deleteAllMoviesNowPlaying(): Int
+
+    @Query("DELETE FROM featured_movies_trending_today_table")
+    suspend fun deleteAllMoviesTrendingToday(): Int
+
+    @Query("DELETE FROM featured_movies_trending_this_week_table")
+    suspend fun deleteAllMoviesTrendingThisWeek(): Int
+
+    @Query("DELETE FROM featured_movies_upcoming_table")
+    suspend fun deleteAllMoviesUpcoming(): Int
 }

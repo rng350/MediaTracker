@@ -45,6 +45,7 @@ class ScreensNavigator {
         nestedNavControllerObserveJob = coroutineScope.launch {
             nestedNavController.currentBackStackEntryFlow.map { backStackEntry ->
                 val route = when (val routeName = backStackEntry.destination.route) {
+                    Route.FeaturedMoviesScreen.routeName -> Route.FeaturedMoviesScreen
                     Route.DiscoverMoviesScreen.routeName -> Route.DiscoverMoviesScreen
                     Route.MovieWatchlistScreen.routeName -> Route.MovieWatchlistScreen
                     Route.WatchedMoviesListScreen.routeName -> Route.WatchedMoviesListScreen

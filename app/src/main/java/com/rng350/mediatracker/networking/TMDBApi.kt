@@ -36,4 +36,24 @@ interface TMDBApi {
     suspend fun getMovieDetails(
         @Path("movie_id") movieId: String?
     ): Response<MovieDetailsSchema>
+
+    @GET("movie/now_playing")
+    suspend fun getMoviesPlayingNow(
+        @Query("page") page: Int?
+    ): Response<MoviesListSchema>
+
+    @GET("movie/upcoming")
+    suspend fun getUpcomingMovies(
+        @Query("page") page: Int?
+    ): Response<MoviesListSchema>
+
+    @GET("trending/movie/day")
+    suspend fun getTrendingMoviesOfDay(
+        @Query("page") page: Int?
+    ): Response<MoviesListSchema>
+
+    @GET("trending/movie/week")
+    suspend fun getTrendingMoviesOfWeek(
+        @Query("page") page: Int?
+    ): Response<MoviesListSchema>
 }

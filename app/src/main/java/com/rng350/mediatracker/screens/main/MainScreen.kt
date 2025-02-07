@@ -16,6 +16,7 @@ import androidx.navigation.compose.rememberNavController
 import com.rng350.mediatracker.Route
 import com.rng350.mediatracker.screens.discovermovies.DiscoverMoviesScreen
 import com.rng350.mediatracker.screens.ScreensNavigator
+import com.rng350.mediatracker.screens.featuredmovies.FeaturedMoviesScreen
 import com.rng350.mediatracker.screens.moviedetails.MovieDetailsScreen
 import com.rng350.mediatracker.screens.watchedmovies.WatchedMoviesListScreen
 import com.rng350.mediatracker.screens.watchlist.WatchlistScreen
@@ -56,8 +57,13 @@ fun MainScreen() {
                     screenNavigator.setNestedNavController(discoverScreenNestedNavController)
                     NavHost(
                         navController = discoverScreenNestedNavController,
-                        startDestination = Route.DiscoverMoviesScreen.routeName
+                        startDestination = Route.FeaturedMoviesScreen.routeName
                     ) {
+                        composable(route = Route.FeaturedMoviesScreen.routeName) {
+                            FeaturedMoviesScreen(onMovieClicked = { movieId ->
+                                screenNavigator.navigateToRoute(Route.MovieDetailsScreen(movieId))
+                            })
+                        }
                         composable(route = Route.DiscoverMoviesScreen.routeName) {
                             DiscoverMoviesScreen(onMovieClicked = { movieId ->
                                 screenNavigator.navigateToRoute(Route.MovieDetailsScreen(movieId))

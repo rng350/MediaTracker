@@ -10,6 +10,7 @@ sealed class Route(val routeName: String) {
     }
     data object MovieWatchlistScreen: Route("watchlistScreen")
     data object WatchedMoviesListScreen: Route("watchedMovies")
+    data object FeaturedMoviesScreen: Route("featuredMovies")
 
     open val navCommand = routeName
 }

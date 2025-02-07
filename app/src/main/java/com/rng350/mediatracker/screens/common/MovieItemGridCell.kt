@@ -2,6 +2,7 @@ package com.rng350.mediatracker.screens.common
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -30,13 +31,25 @@ import com.rng350.mediatracker.movies.MovieForDisplay
 fun MovieItemGridCell(
     movie: MovieForDisplay,
     modifier: Modifier = Modifier,
-    onMovieClicked: () -> Unit
+    onMovieClicked: () -> Unit,
+    parent: Parent = Parent.LazyGridCell
 ) {
     Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .aspectRatio(0.66666666f)
-            .padding(2.dp),
+        modifier =
+        when (parent) {
+            Parent.LazyRow -> {
+                Modifier
+                    .fillMaxWidth()
+                    .aspectRatio(0.66666666f)
+                    .padding(2.dp)
+            }
+            Parent.LazyGridCell -> {
+                Modifier
+                    .fillMaxHeight()
+                    .aspectRatio(0.66666666f)
+                    .padding(2.dp)
+            }
+        },
         shape = RectangleShape,
         onClick = { onMovieClicked() }
     ) {
@@ -95,4 +108,9 @@ fun MovieItemGridCell(
             }
         }
     }
+}
+
+enum class Parent {
+    LazyRow,
+    LazyGridCell
 }
