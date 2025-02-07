@@ -1,7 +1,14 @@
 package com.rng350.mediatracker
 
+import com.rng350.mediatracker.common.encodeToBase64
+
 sealed class Route(val routeName: String) {
-    data object DiscoverMoviesScreen: Route("discoverMoviesScreen")
+    data class DiscoverMoviesScreen(
+        val searchQuery: String = ""
+    ): Route("discoverMoviesScreen/{searchQuery}") {
+        override val navCommand: String
+            get() = routeName.replace("{searchQuery}", searchQuery.encodeToBase64())
+    }
     data class MovieDetailsScreen(
         val movieId: String = ""
     ): Route("movieDetails/{movieId}") {

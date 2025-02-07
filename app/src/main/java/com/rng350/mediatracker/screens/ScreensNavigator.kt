@@ -1,8 +1,10 @@
 package com.rng350.mediatracker.screens
 
+import android.util.Log
 import androidx.navigation.NavHostController
 import com.rng350.mediatracker.BottomTab
 import com.rng350.mediatracker.Route
+import com.rng350.mediatracker.common.decodeFromBase64
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -28,7 +30,7 @@ class ScreensNavigator {
         parentNavControllerObserveJob = coroutineScope.launch {
             navHostController.currentBackStackEntryFlow.map { backStackEntry ->
                 val bottomTab = when (val routeName = backStackEntry.destination.route) {
-                    Route.DiscoverMoviesScreen.routeName -> BottomTab.Discover
+                    Route.DiscoverMoviesScreen().routeName -> BottomTab.Discover
                     Route.MovieWatchlistScreen.routeName -> BottomTab.Watchlist
                     Route.WatchedMoviesListScreen.routeName -> BottomTab.Watched
                     null -> null
@@ -46,7 +48,12 @@ class ScreensNavigator {
             nestedNavController.currentBackStackEntryFlow.map { backStackEntry ->
                 val route = when (val routeName = backStackEntry.destination.route) {
                     Route.FeaturedMoviesScreen.routeName -> Route.FeaturedMoviesScreen
-                    Route.DiscoverMoviesScreen.routeName -> Route.DiscoverMoviesScreen
+                    Route.DiscoverMoviesScreen().routeName -> {
+                        val args = backStackEntry.arguments
+                        Route.DiscoverMoviesScreen(
+                            args?.getString("searchQuery")!!.decodeFromBase64()
+                        )
+                    }
                     Route.MovieWatchlistScreen.routeName -> Route.MovieWatchlistScreen
                     Route.WatchedMoviesListScreen.routeName -> Route.WatchedMoviesListScreen
                     Route.MovieDetailsScreen().routeName -> {
@@ -71,7 +78,7 @@ class ScreensNavigator {
 
     fun navigateToTab(bottomTab: BottomTab) {
         val route = when(bottomTab) {
-            BottomTab.Discover -> Route.DiscoverMoviesScreen
+            BottomTab.Discover -> Route.DiscoverMoviesScreen()
             BottomTab.Watched -> Route.WatchedMoviesListScreen
             BottomTab.Watchlist -> Route.MovieWatchlistScreen
         }

@@ -4,6 +4,7 @@ import java.time.LocalDate
 import java.time.Month
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
+import java.util.Base64
 
 fun LocalDate.toDisplay(): String {
     return this.format(DateTimeFormatter.ofPattern("dd LLLL yyyy"))
@@ -34,4 +35,12 @@ fun String.toLocalDate(): LocalDate? {
         localDate = LocalDate.parse(this, DateTimeFormatter.ISO_LOCAL_DATE)
     } catch (_: DateTimeParseException) {}
     return localDate
+}
+
+fun String.encodeToBase64(): String {
+    return Base64.getUrlEncoder().encodeToString(this.toByteArray())
+}
+
+fun String.decodeFromBase64(): String {
+    return String(Base64.getUrlDecoder().decode(this))
 }

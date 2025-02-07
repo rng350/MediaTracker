@@ -1,5 +1,6 @@
 package com.rng350.mediatracker.screens.main
 
+import android.util.Log
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -14,6 +15,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.rng350.mediatracker.Route
+import com.rng350.mediatracker.common.decodeFromBase64
 import com.rng350.mediatracker.screens.discovermovies.DiscoverMoviesScreen
 import com.rng350.mediatracker.screens.ScreensNavigator
 import com.rng350.mediatracker.screens.featuredmovies.FeaturedMoviesScreen
@@ -48,11 +50,11 @@ fun MainScreen() {
             NavHost(
                 modifier = Modifier.fillMaxSize(),
                 navController = parentNavController,
-                startDestination = Route.DiscoverMoviesScreen.routeName,
+                startDestination = Route.DiscoverMoviesScreen().routeName,
                 enterTransition = { fadeIn(animationSpec = tween(100)) },
                 exitTransition = { fadeOut(animationSpec = tween(100)) }
             ) {
-                composable(route = Route.DiscoverMoviesScreen.routeName) {
+                composable(route = Route.DiscoverMoviesScreen().routeName) {
                     val discoverScreenNestedNavController = rememberNavController()
                     screenNavigator.setNestedNavController(discoverScreenNestedNavController)
                     NavHost(
@@ -60,14 +62,25 @@ fun MainScreen() {
                         startDestination = Route.FeaturedMoviesScreen.routeName
                     ) {
                         composable(route = Route.FeaturedMoviesScreen.routeName) {
-                            FeaturedMoviesScreen(onMovieClicked = { movieId ->
-                                screenNavigator.navigateToRoute(Route.MovieDetailsScreen(movieId))
-                            })
+                            FeaturedMoviesScreen(
+                                onMovieClicked = { movieId ->
+                                    screenNavigator.navigateToRoute(Route.MovieDetailsScreen(movieId))
+                                },
+                                onSearch = { searchQuery ->
+                                    screenNavigator.navigateToRoute(Route.DiscoverMoviesScreen(searchQuery = searchQuery))
+                                }
+                            )
                         }
-                        composable(route = Route.DiscoverMoviesScreen.routeName) {
-                            DiscoverMoviesScreen(onMovieClicked = { movieId ->
-                                screenNavigator.navigateToRoute(Route.MovieDetailsScreen(movieId))
-                            })
+                        composable(route = Route.DiscoverMoviesScreen().routeName) { backStackEntry ->
+                            val searchQuery = remember {
+                                (screenNavigator.currentRoute.value as Route.DiscoverMoviesScreen).searchQuery
+                            }
+                            DiscoverMoviesScreen(
+                                searchQuery = searchQuery,
+                                onMovieClicked = { movieId ->
+                                    screenNavigator.navigateToRoute(Route.MovieDetailsScreen(movieId))
+                                }
+                            )
                         }
                         composable(route = Route.MovieDetailsScreen().routeName) {
                             val movieId = remember {

@@ -1,8 +1,10 @@
 package com.rng350.mediatracker.screens.discovermovies
 
 import android.util.Log
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.rng350.mediatracker.common.decodeFromBase64
 import com.rng350.mediatracker.movies.MovieForDisplay
 import com.rng350.mediatracker.movies.usecases.SearchMoviesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,10 +18,16 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DiscoverMoviesViewModel @Inject constructor(
-    private val searchMoviesUseCase: SearchMoviesUseCase
+    private val searchMoviesUseCase: SearchMoviesUseCase,
+    private val savedStateHandle: SavedStateHandle
 ): ViewModel() {
     private val _movieSearchResults = MutableStateFlow<List<MovieForDisplay>>(emptyList())
     val movieSearchResults: StateFlow<List<MovieForDisplay>> = _movieSearchResults.asStateFlow()
+
+    init {
+        val searchedQuery = savedStateHandle["searchQuery"] ?: ""
+        newMovieSearch(searchedQuery.decodeFromBase64())
+    }
     
     fun newMovieSearch(query: String) {
         viewModelScope.launch {
