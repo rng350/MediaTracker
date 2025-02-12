@@ -64,6 +64,7 @@ fun MovieItemGridCell(
                     placeholder = painterResource(R.drawable.blank_poster),
                     contentDescription = stringResource(R.string.movie_poster),
                     onError = { moviePosterFailedToLoad = true },
+                    onSuccess = { moviePosterFailedToLoad = false },
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
                         .fillMaxSize()
