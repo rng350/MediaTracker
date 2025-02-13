@@ -1,6 +1,7 @@
 package com.rng350.mediatracker.screens.featuredmovies.components
 
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -12,10 +13,14 @@ import com.rng350.mediatracker.screens.common.Parent
 @Composable
 fun FeaturedMoviesList(
     movies: List<MovieForDisplay>,
-    onMovieClicked: (String) -> Unit
+    onMovieClicked: (String) -> Unit,
+    listState: LazyListState
 ) {
     val movieList = movies
-    LazyRow(modifier = Modifier.height(150.dp)) {
+    LazyRow(
+        modifier = Modifier.height(150.dp),
+        state = listState
+    ) {
         items(count = movieList.size) { index ->
             MovieItemGridCell(
                 movie = movieList[index],
