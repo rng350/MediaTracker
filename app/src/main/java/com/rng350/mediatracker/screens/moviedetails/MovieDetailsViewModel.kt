@@ -1,7 +1,11 @@
 package com.rng350.mediatracker.screens.moviedetails
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.work.ExistingWorkPolicy
+import androidx.work.OneTimeWorkRequest
+import androidx.work.WorkManager
 import com.rng350.mediatracker.movies.MovieDetails
 import com.rng350.mediatracker.movies.usecases.AddMovieToLikedListUseCase
 import com.rng350.mediatracker.movies.usecases.AddMovieToWatchedMoviesListUseCase
@@ -10,6 +14,9 @@ import com.rng350.mediatracker.movies.usecases.FetchMovieDetailsUseCase
 import com.rng350.mediatracker.movies.usecases.RemoveMovieFromLikedListUseCase
 import com.rng350.mediatracker.movies.usecases.RemoveMovieFromWatchedMoviesListUseCase
 import com.rng350.mediatracker.movies.usecases.RemoveMovieFromWatchlistUseCase
+import com.rng350.mediatracker.movies.workers.LikeMovieWorker
+import com.rng350.mediatracker.movies.workers.MovieWatchlistWorker
+import com.rng350.mediatracker.movies.workers.SetWatchedMovieWorker
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -22,12 +29,7 @@ import javax.inject.Inject
 @HiltViewModel
 class MovieDetailsViewModel @Inject constructor(
     private val fetchMovieDetailsUseCase: FetchMovieDetailsUseCase,
-    private val addMovieToWatchlistUseCase: AddMovieToWatchlistUseCase,
-    private val removeMovieFromWatchlistUseCase: RemoveMovieFromWatchlistUseCase,
-    private val addMovieToWatchedMoviesListUseCase: AddMovieToWatchedMoviesListUseCase,
-    private val removeMovieFromWatchedMoviesListUseCase: RemoveMovieFromWatchedMoviesListUseCase,
-    private val addMovieToLikedListUseCase: AddMovieToLikedListUseCase,
-    private val removeMovieFromLikedListUseCase: RemoveMovieFromLikedListUseCase
+    private val workManager: WorkManager,
 ): ViewModel() {
     sealed class MovieDetailsResult {
         data class Success(val movieDetails: MovieDetails): MovieDetailsResult()
@@ -45,6 +47,15 @@ class MovieDetailsViewModel @Inject constructor(
     val movieIsOnWatchlist: StateFlow<Boolean> get() = _movieIsOnWatchlist
     private val _movieHasBeenWatched = MutableStateFlow<Boolean>(false)
     val movieHasBeenWatched: StateFlow<Boolean> get() = _movieHasBeenWatched
+
+    private val movieDetailsWorkTag = "movieDetails"
+
+    private fun getCurrentMovieDetails(movie: MovieDetails): MovieDetails =
+        movie.copy(
+            isLiked = movieIsLiked.value,
+            isOnWatchlist = movieIsOnWatchlist.value,
+            hasBeenWatched = movieHasBeenWatched.value
+        )
 
     suspend fun fetchMovieDetails(movieId: String) {
         withContext(Dispatchers.Main.immediate) {
@@ -73,13 +84,13 @@ class MovieDetailsViewModel @Inject constructor(
         (movieDetails.value as? MovieDetailsResult.Success)
             ?.movieDetails
             ?.let { movie ->
-                viewModelScope.launch {
-                    when (movieIsOnWatchlist.value) {
-                        true -> removeMovieFromWatchlistUseCase(movie)
-                        false -> addMovieToWatchlistUseCase(movie)
-                    }
-                }
                 _movieIsOnWatchlist.update { !_movieIsOnWatchlist.value }
+                val workRequest = MovieWatchlistWorker.createWorkRequest(
+                    getCurrentMovieDetails(movie),
+                    if (movieIsOnWatchlist.value) MovieWatchlistWorker.WatchlistAction.ADD
+                    else MovieWatchlistWorker.WatchlistAction.REMOVE
+                )
+                workManager.enqueueUniqueWork(movieDetailsWorkTag, ExistingWorkPolicy.APPEND, workRequest)
             }
     }
 
@@ -87,13 +98,13 @@ class MovieDetailsViewModel @Inject constructor(
         (movieDetails.value as? MovieDetailsResult.Success)
             ?.movieDetails
             ?.let { movie ->
-                viewModelScope.launch {
-                    when (movieIsLiked.value) {
-                        true -> removeMovieFromLikedListUseCase(movie)
-                        false -> addMovieToLikedListUseCase(movie)
-                    }
-                }
                 _movieIsLiked.update { !_movieIsLiked.value }
+                val workRequest = LikeMovieWorker.createWorkRequest(
+                    getCurrentMovieDetails(movie),
+                    if (movieIsLiked.value) LikeMovieWorker.LikeMovieAction.ADD
+                    else LikeMovieWorker.LikeMovieAction.REMOVE
+                )
+                workManager.enqueueUniqueWork(movieDetailsWorkTag, ExistingWorkPolicy.APPEND, workRequest)
             }
     }
 
@@ -101,13 +112,13 @@ class MovieDetailsViewModel @Inject constructor(
         (movieDetails.value as? MovieDetailsResult.Success)
             ?.movieDetails
             ?.let { movie ->
-                viewModelScope.launch {
-                    when (movieHasBeenWatched.value) {
-                        true -> removeMovieFromWatchedMoviesListUseCase(movie)
-                        false -> addMovieToWatchedMoviesListUseCase(movie)
-                    }
-                }
                 _movieHasBeenWatched.update { !_movieHasBeenWatched.value }
+                val workRequest = SetWatchedMovieWorker.createWorkRequest(
+                    getCurrentMovieDetails(movie),
+                    if (movieHasBeenWatched.value) SetWatchedMovieWorker.WatchMovieAction.ADD
+                    else SetWatchedMovieWorker.WatchMovieAction.REMOVE
+                )
+                workManager.enqueueUniqueWork(movieDetailsWorkTag, ExistingWorkPolicy.APPEND, workRequest)
             }
     }
 }

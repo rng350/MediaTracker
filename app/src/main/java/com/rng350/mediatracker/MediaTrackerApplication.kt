@@ -1,6 +1,8 @@
 package com.rng350.mediatracker
 
 import android.app.Application
+import androidx.hilt.work.HiltWorkerFactory
+import androidx.work.Configuration
 import coil3.ImageLoader
 import coil3.PlatformContext
 import coil3.SingletonImageLoader
@@ -11,9 +13,12 @@ import coil3.request.crossfade
 import coil3.util.DebugLogger
 import dagger.hilt.android.HiltAndroidApp
 import okio.Path.Companion.toOkioPath
+import javax.inject.Inject
 
 @HiltAndroidApp
-class MediaTrackerApplication: Application(), SingletonImageLoader.Factory {
+class MediaTrackerApplication: Application(), SingletonImageLoader.Factory, Configuration.Provider {
+    @Inject lateinit var workerFactory: HiltWorkerFactory
+
     override fun newImageLoader(context: PlatformContext): ImageLoader {
         return ImageLoader(context).newBuilder()
             .memoryCachePolicy(CachePolicy.ENABLED)
@@ -34,4 +39,10 @@ class MediaTrackerApplication: Application(), SingletonImageLoader.Factory {
             .logger(DebugLogger())
             .build()
     }
+
+    override val workManagerConfiguration: Configuration
+        get() = Configuration.Builder()
+            .setWorkerFactory(workerFactory)
+            .setMinimumLoggingLevel(android.util.Log.DEBUG)
+            .build()
 }

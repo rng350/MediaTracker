@@ -14,7 +14,7 @@ class RemoveMovieFromLikedListUseCase @Inject constructor(
         movieDao.removeMovieFromLikedList(LikedMovie(movieDetails.movieId.toInt()))
         movieDetailsCache.updateCache(
             key = movieDetails.movieId,
-            updatedValue = movieDetails.copy(hasBeenWatched = false)
+            updatedValue = movieDetails.copy(isLiked = false)
         )
     }
 }

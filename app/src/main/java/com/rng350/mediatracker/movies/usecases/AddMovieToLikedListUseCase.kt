@@ -17,7 +17,7 @@ class AddMovieToLikedListUseCase @Inject constructor(
         movieDao.addMovieToLikedList(LikedMovie(movieId))
         movieDetailsCache.updateCache(
             key = movieDetails.movieId,
-            updatedValue = movieDetails.copy(hasBeenWatched = false)
+            updatedValue = movieDetails.copy(isLiked = true)
         )
     }
 }

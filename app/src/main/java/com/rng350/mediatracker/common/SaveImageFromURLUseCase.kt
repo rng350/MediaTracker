@@ -21,7 +21,6 @@ import java.io.FileNotFoundException
 import java.io.FileOutputStream
 import javax.inject.Inject
 
-@ViewModelScoped
 class SaveImageFromURLUseCase @Inject constructor(
     private val context: Context,
     private val imageLoader: ImageLoader

@@ -2,8 +2,8 @@ package com.rng350.mediatracker.common.di
 
 import android.app.Application
 import android.content.Context
-import android.provider.MediaStore.Audio.Media
 import androidx.room.Room
+import androidx.work.WorkManager
 import coil3.ImageLoader
 import com.rng350.mediatracker.BuildConfig
 import com.rng350.mediatracker.common.Constants
@@ -12,6 +12,7 @@ import com.rng350.mediatracker.common.database.MediaTrackerDatabase
 import com.rng350.mediatracker.common.database.MovieDao
 import com.rng350.mediatracker.common.database.MovieGenreDao
 import com.rng350.mediatracker.common.database.MovieStaffDao
+import com.rng350.mediatracker.movies.usecases.SaveMovieDetailsToDatabaseUseCase
 import com.rng350.mediatracker.networking.TMDBApi
 import com.rng350.mediatracker.networking.TmdbApiTimer
 import com.squareup.moshi.Moshi
@@ -19,6 +20,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.android.scopes.ViewModelScoped
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -96,4 +98,32 @@ class ApplicationModule {
 
     @Provides
     fun tmdbApiTimer(): TmdbApiTimer = TmdbApiTimer()
+
+
+    @Provides
+    fun provideSaveMovieDetailsToDatabaseUseCase(
+        saveImageFromURLUseCase: SaveImageFromURLUseCase,
+        movieDao: MovieDao,
+        movieStaffDao: MovieStaffDao,
+        movieGenreDao: MovieGenreDao
+    ) = SaveMovieDetailsToDatabaseUseCase(
+        saveImageFromUrl = saveImageFromURLUseCase,
+        movieDao = movieDao,
+        movieStaffDao = movieStaffDao,
+        movieGenreDao = movieGenreDao
+    )
+
+    @Provides
+    fun provideSaveImageFromUrlUseCase(
+        @ApplicationContext context: Context,
+        imageLoader: ImageLoader
+    ) = SaveImageFromURLUseCase(
+        context,
+        imageLoader
+    )
+
+    @Provides
+    fun provideWorkManager(application: Application): WorkManager {
+        return WorkManager.getInstance(application)
+    }
 }

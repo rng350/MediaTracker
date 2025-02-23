@@ -18,7 +18,7 @@ import dagger.hilt.android.scopes.ViewModelScoped
 @Module
 @InstallIn(ViewModelComponent::class)
 object ViewModelModule {
-    @Provides
+/*    @Provides
     @ViewModelScoped
     fun provideSaveMovieDetailsToDatabaseUseCase(
         saveImageFromURLUseCase: SaveImageFromURLUseCase,
@@ -40,5 +40,5 @@ object ViewModelModule {
     ) = SaveImageFromURLUseCase(
         context,
         imageLoader
-    )
+    )*/
 }

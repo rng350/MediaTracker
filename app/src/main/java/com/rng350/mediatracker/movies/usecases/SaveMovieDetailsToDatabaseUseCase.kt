@@ -19,8 +19,8 @@ import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import javax.inject.Inject
+import javax.inject.Singleton
 
-@ViewModelScoped
 class SaveMovieDetailsToDatabaseUseCase @Inject constructor(
     private val saveImageFromUrl: SaveImageFromURLUseCase,
     private val movieDao: MovieDao,
